@@ -1,0 +1,12 @@
+Nome: produto y
+Quantidade: 5
+Preço: 10,00
+
+VENDA: Produto Y, Quantidade: 3
+
+Nome: produto x
+Quantidade: 1200
+Preço: 45,00
+
+VENDA: Produto X, Quantidade: 300
+
