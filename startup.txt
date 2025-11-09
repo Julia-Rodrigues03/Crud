@@ -10,3 +10,13 @@ Preço: 45,00
 
 VENDA: Produto X, Quantidade: 300
 
+Nome: produto x
+Quantidade: 55
+Preço: 90,00
+
+VENDA: Produto X, Quantidade: 25
+
+CADASTRO: produto y, Quantidade: 100, Preço: R$ 30,00
+
+VENDA: Produto Y, Quantidade: 37
+
