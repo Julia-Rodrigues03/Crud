@@ -5,6 +5,10 @@
 #include <windows.h> 
 #include <cstring> // Para strstr
 #include <limits>   // Para limpar o buffer de entrada (cin)
+#include <ios> 
+#include <string>
+
+#undef max // soluciona o erro das linhas 51 e 57.
 
 #define ARQUIVO "startup.txt"
 
@@ -53,12 +57,57 @@ void limparBuffer() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+// Função de Validação de Entrada
+template <typename T>
+T lerOpcao(const char* prompt) {
+    T valor;
+    cout << "\n" << NEGRITO << BRANCO_TEXTO << prompt << RESET;
+    while (!(cin >> valor)) {
+        cin.clear(); 
+        limparBuffer(); 
+        cout << NEGRITO << VERMELHO_ERRO << "Entrada inválida. Digite um NÚMERO: " << RESET;
+    }
+    return valor;
+}
+
 
 // --- DECLARAÇÕES DAS FUNÇÕES DO CRUD ---
 void cadastrarProduto (const char nome_produto[], int qtd, float preco);
 int verificarEstoque(int estoque_atual);
 void cadastrarVenda(const char nome_produto[], int qtd);
 void verRelatorioVendas(); 
+
+// --- FUNÇÃO DE LOGIN ---
+bool fazerLogin(char nome_usuario[]) {
+    const char USUARIO_CORRETO[] = "admin";
+    const char SENHA_CORRETA[] = "123"; 
+    char senha_digitada[30];
+    int tentativas = 0;
+    const int MAX_TENTATIVAS = 3;
+
+    while (tentativas < MAX_TENTATIVAS) {
+        limparTela();
+        cout << NEGRITO << AZUL_TITULO << "================ LOGIN DE ACESSO ================" << RESET << endl;
+        cout << CINZA_SEPARADOR << "-----------------------------------------------" << RESET << endl;
+        
+        cout << BRANCO_TEXTO << "Nome de Usuário: " << RESET;
+        cin.getline(nome_usuario, 30);
+        
+        cout << BRANCO_TEXTO << "Senha: " << RESET;
+        cin.getline(senha_digitada, 30);
+
+        if (strcmp(nome_usuario, USUARIO_CORRETO) == 0 && strcmp(senha_digitada, SENHA_CORRETA) == 0) {
+            cout << "\n" << VERDE_SUCESSO << "Login realizado com sucesso!" << RESET << endl;
+            return true;
+        } else {
+            tentativas++;
+            cout << "\n" << VERMELHO_ERRO << "Credenciais inválidas. Tentativa " << tentativas << " de " << MAX_TENTATIVAS << "." << RESET << endl;
+            pausar();
+        }
+    }
+    cout << "\n" << VERMELHO_ERRO << "Limite de tentativas atingido. O sistema será encerrado." << RESET << endl;
+    return false;
+}
 
 // --- INÍCIO DO PROGRAMA ---
 int main() {
@@ -75,9 +124,9 @@ int main() {
     char nome[30] = ""; 
 
     // --- VARIÁVEIS DE ESTOQUE ---
-    int estoque_x = 0;
-    int estoque_y = 0;
-    int estoque_z = 0;
+    int estoque_chocolate = 0;
+    int estoque_bala = 0;
+    int estoque_suco = 0;
 
     // --- BOAS VINDAS ---
     cout << BRANCO_TEXTO << "Digite seu nome: " << RESET;
@@ -85,6 +134,15 @@ int main() {
     cout << VERDE_SUCESSO << "Seja bem vindo(a) " << NEGRITO << nome_usuario << "!" << RESET << endl; 
 
     pausar(); 
+
+    // --- CHAMADA DE LOGIN ANTES DO MENU CRUD ---
+// Se o login falhar, o programa termina.
+if (!fazerLogin(nome_usuario)) {
+    return 1;
+}
+
+cout << VERDE_SUCESSO << "Seja bem vindo(a) " << NEGRITO << nome_usuario << "!" << RESET << endl; 
+pausar();
 
     // --- LOOP PRINCIPAL DO MENU ---
     do {
@@ -120,7 +178,7 @@ int main() {
                     cout << "  " << AMARELO_AVISO << "4" << RESET << BRANCO_TEXTO << " - Voltar ao menu anterior" << RESET << endl;
                     cout << "\n" << NEGRITO << BRANCO_TEXTO << "Escolha a opção desejada: " << RESET;
                     
-                    cin >> op1;
+                    op1 = lerOpcao<int>("Escolha a opção desejada: ");
                     limparBuffer();
                     
                     switch (op1){
@@ -131,7 +189,7 @@ int main() {
                             cout << BRANCO_TEXTO << "Digite o preço do produto: R$ " << RESET;
                             cin >> preco; limparBuffer();
                             cadastrarProduto("produto x", qtd, preco); 
-                            estoque_x += qtd;
+                            estoque_chocolate += qtd;
                             cout << VERDE_SUCESSO << "Produto X cadastrado!" << RESET << endl;
                             break;
                         case 2:
@@ -141,7 +199,7 @@ int main() {
                             cout << BRANCO_TEXTO << "Digite o preço do produto: R$ " << RESET;
                             cin >> preco; limparBuffer();
                             cadastrarProduto("produto y", qtd, preco);
-                            estoque_y += qtd;
+                            estoque_bala += qtd;
                             cout << VERDE_SUCESSO << "Produto Y cadastrado!" << RESET << endl;
                             break;
                         case 3:
@@ -151,7 +209,7 @@ int main() {
                             cout << BRANCO_TEXTO << "Digite o preço do produto: R$ " << RESET;
                             cin >> preco; limparBuffer();
                             cadastrarProduto("produto z", qtd, preco);
-                            estoque_z += qtd;
+                            estoque_suco += qtd;
                             cout << VERDE_SUCESSO << "Produto Z cadastrado!" << RESET << endl;
                             break;
                         case 4: 
@@ -178,18 +236,18 @@ int main() {
                     cout << "  " << AMARELO_AVISO << "4" << RESET << BRANCO_TEXTO << " - Voltar ao menu anterior" << RESET << endl;
                     cout << "\n" << NEGRITO << BRANCO_TEXTO << "Escolha a opção desejada: " << RESET;
                     
-                    cin >> op2;
+                    op2 = lerOpcao<int>("Escolha a opção desejada: ");
                     limparBuffer();
                     
                     switch (op2){
                         case 1: 
-                            cout << BRANCO_TEXTO << "Estoque do produto x é de: " << NEGRITO << VERDE_SUCESSO << verificarEstoque(estoque_x) << RESET << endl; 
+                            cout << BRANCO_TEXTO << "Estoque do produto x é de: " << NEGRITO << VERDE_SUCESSO << verificarEstoque(estoque_chocolate) << RESET << endl; 
                             break;
                         case 2: 
-                            cout << BRANCO_TEXTO << "Estoque do produto y é de: " << NEGRITO << VERDE_SUCESSO << verificarEstoque(estoque_y) << RESET << endl; 
+                            cout << BRANCO_TEXTO << "Estoque do produto y é de: " << NEGRITO << VERDE_SUCESSO << verificarEstoque(estoque_bala) << RESET << endl; 
                             break;
                         case 3: 
-                            cout << BRANCO_TEXTO << "Estoque do produto z é de: " << NEGRITO << VERDE_SUCESSO << verificarEstoque(estoque_z) << RESET << endl; 
+                            cout << BRANCO_TEXTO << "Estoque do produto z é de: " << NEGRITO << VERDE_SUCESSO << verificarEstoque(estoque_suco) << RESET << endl; 
                             break;
                         case 4: 
                             cout << AMARELO_AVISO << "voltando ao menu anterior..." << RESET << endl; 
@@ -215,17 +273,17 @@ int main() {
                     cout << "  " << AMARELO_AVISO << "4" << RESET << BRANCO_TEXTO << " - Voltar ao menu anterior" << RESET << endl;
                     cout << "\n" << NEGRITO << BRANCO_TEXTO << "Escolha a opção desejada: " << RESET;
                     
-                    cin >> op3;
+                    op3 = lerOpcao<int>("Escolha a opção desejada: ");
                     limparBuffer();
                     
                     switch (op3){
                         case 1: 
-                            cout << BRANCO_TEXTO << "Vender produto x (Estoque: " << AMARELO_AVISO << estoque_x << RESET << BRANCO_TEXTO << ")" << RESET << endl; 
+                            cout << BRANCO_TEXTO << "Vender produto x (Estoque: " << AMARELO_AVISO << estoque_chocolate << RESET << BRANCO_TEXTO << ")" << RESET << endl; 
                             cout << BRANCO_TEXTO << "Digite a quantidade a ser vendida: " << RESET; 
                             cin >> qtd; limparBuffer();
 
-                            if(qtd <= estoque_x){
-                                estoque_x -= qtd; 
+                            if(qtd <= estoque_chocolate){
+                                estoque_chocolate -= qtd; 
                                 cadastrarVenda("Produto X", qtd); 
                                 cout << VERDE_SUCESSO << "Venda realizada!" << RESET << endl;
                             } else {
@@ -233,12 +291,12 @@ int main() {
                             }
                             break;
                         case 2: 
-                            cout << BRANCO_TEXTO << "Vender produto y (Estoque: " << AMARELO_AVISO << estoque_y << RESET << BRANCO_TEXTO << ")" << RESET << endl; 
+                            cout << BRANCO_TEXTO << "Vender produto y (Estoque: " << AMARELO_AVISO << estoque_bala << RESET << BRANCO_TEXTO << ")" << RESET << endl; 
                             cout << BRANCO_TEXTO << "Digite a quantidade a ser vendida: " << RESET; 
                             cin >> qtd; limparBuffer(); 
 
-                            if(qtd <= estoque_y){
-                                estoque_y -= qtd; 
+                            if(qtd <= estoque_bala){
+                                estoque_bala -= qtd; 
                                 cadastrarVenda("Produto Y", qtd); 
                                 cout << VERDE_SUCESSO << "Venda realizada!" << RESET << endl;
                             } else {
@@ -246,12 +304,12 @@ int main() {
                             }
                             break;
                         case 3: 
-                            cout << BRANCO_TEXTO << "Vender produto z (Estoque: " << AMARELO_AVISO << estoque_z << RESET << BRANCO_TEXTO << ")" << RESET << endl; 
+                            cout << BRANCO_TEXTO << "Vender produto z (Estoque: " << AMARELO_AVISO << estoque_suco << RESET << BRANCO_TEXTO << ")" << RESET << endl; 
                             cout << BRANCO_TEXTO << "Digite a quantidade a ser vendida: " << RESET; 
                             cin >> qtd; limparBuffer();
 
-                            if(qtd <= estoque_z){
-                                estoque_z -= qtd; 
+                            if(qtd <= estoque_suco){
+                                estoque_suco -= qtd; 
                                 cadastrarVenda("Produto Z", qtd); 
                                 cout << VERDE_SUCESSO << "Venda realizada!" << RESET << endl;
                             } else {
@@ -283,16 +341,17 @@ int main() {
                     cout << "  " << VERMELHO_ERRO << "5" << RESET << BRANCO_TEXTO << " - Excluir TUDO (Memória e Arquivo)" << RESET << endl;
                     cout << "  " << AMARELO_AVISO << "6" << RESET << BRANCO_TEXTO << " - Voltar ao menu anterior" << RESET << endl;
                     cout << "\n" << NEGRITO << BRANCO_TEXTO << "Escolha a opção desejada: " << RESET;
-                    cin >> op4;
+                    
+                    op4 = lerOpcao<int>("Escolha a opção desejada: ");
                     limparBuffer();
 
                     switch (op4){
-                        case 1: {estoque_x = 0; cout << VERDE_SUCESSO << "Estoque do produto x excluído!" << RESET << endl;} break; 
-                        case 2: {estoque_y = 0; cout << VERDE_SUCESSO << "Estoque do produto y excluído!" << RESET << endl;} break;
-                        case 3: {estoque_z = 0; cout << VERDE_SUCESSO << "Estoque do produto z excluído!" << RESET << endl;} break;
+                        case 1: {estoque_chocolate = 0; cout << VERDE_SUCESSO << "Estoque do produto x excluído!" << RESET << endl;} break; 
+                        case 2: {estoque_bala = 0; cout << VERDE_SUCESSO << "Estoque do produto y excluído!" << RESET << endl;} break;
+                        case 3: {estoque_suco = 0; cout << VERDE_SUCESSO << "Estoque do produto z excluído!" << RESET << endl;} break;
                         case 4: {nome[0] = '\0'; cout << VERDE_SUCESSO << "Nome deletado com sucesso!" << RESET << endl;} break; 
                         case 5: {
-                            nome[0] = '\0'; estoque_x = 0; estoque_y = 0; estoque_z = 0; 
+                            nome[0] = '\0'; estoque_chocolate = 0; estoque_bala = 0; estoque_suco = 0; 
                             cout << VERDE_SUCESSO << "Todos dados da memória excluídos!" << RESET << endl;
 
                             FILE *arquivoParaLimpar = fopen(ARQUIVO, "w");
