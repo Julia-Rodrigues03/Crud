@@ -4,7 +4,7 @@
 
 Este projeto foi realizado para a disciplina de **Técnicas e Desenvolvimento de Algoritmos**.
 
-A finalidade principal da aplicação é o gerênciamento de estoque de uma [**COMPLETE AQUI: loja/empresa/etc.**], permitindo o controle de entrada e saída de produtos.
+A finalidade principal da aplicação é o gerênciamento de estoque de uma Supermarket BZ, permitindo o controle de entrada e saída de produtos.
 
 ## ✨ Funcionalidades
 
