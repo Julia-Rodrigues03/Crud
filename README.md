@@ -1,4 +1,4 @@
-# 📦 Projeto de Gerenciamento de Estoque
+# 📦  Gerenciamento de Estoque Supermarket BZ
 
 ## 📚 Descrição
 
@@ -13,6 +13,8 @@ O sistema implementa um CRUD (Create, Read, Update, Delete) básico com as segui
 * **Cadastro de Produto:** Permite adicionar novos itens ao estoque.
 * **Venda de Produto:** Realiza o registro de uma venda, dando baixa na quantidade do item em estoque.
 * **Verificação de Estoque:** Permite consultar a quantidade atual de produtos disponíveis.
+* **Senha para acessar o sistema** permitindo segurança ao sistema.
+* **Todas mudanças são registradas em um arquivo txt** garantindo organização e transparência.
 
 ## 🧑‍💻 Autores
 
