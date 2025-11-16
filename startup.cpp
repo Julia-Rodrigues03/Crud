@@ -421,15 +421,30 @@ void cadastrarProduto(const char nome_produto[], int qtd, float preco){
 }
 
 // --- Função para salvar a VENDA no arquivo ---
-void cadastrarVenda(const char nome_produto[], int qtd) {
-    FILE *fp = fopen(ARQUIVO, "a"); 
+void cadastrarVenda(const char *nome_produto, int quantidade, const char *nome_usuario, float preco)
+{
+    FILE *fp = fopen("ARQUIVO.txt", "a");
     if (fp == NULL) {
-        cout << VERMELHO_ERRO << "Erro ao abrir o arquivo de vendas!" << RESET << endl;
-        return; 
+        cout << "Erro ao abrir o arquivo!";
+        return;
     }
-    fprintf(fp, "VENDA: %s, Quantidade: %d\n\n", nome_produto, qtd); 
-    fclose (fp);
+
+    fprintf(fp, 
+            "VENDA:\n"
+            "Produto: %s\n"
+            "Quantidade: %d\n"
+            "Usuario: %s\n"
+            "Preco: %.2f\n"
+            "Total: %.2f\n\n",
+            nome_produto,
+            quantidade,
+            nome_usuario,
+            preco,
+            preco * quantidade);
+
+    fclose(fp);
 }
+
 
 // --- Função para LER o relatório de vendas ---
 void verRelatorioVendas() {
